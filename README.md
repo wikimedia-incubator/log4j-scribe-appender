@@ -44,13 +44,12 @@ Configuration
 	log4j.appender.scribe=org.apache.log4j.net.ScribeAppender
 
 	# do NOT use a trailing %n unless you want a newline to be transmitted to Scribe after every message
+        # since you are sane and using Puppet or Chef to deploy configuration, you should also have that tool insert canonical hostname in the logging pattern
 	log4j.appender.scribe.layout=org.apache.log4j.PatternLayout
-	log4j.appender.scribe.layout.ConversionPattern=%d{ISO8601} %m
+	log4j.appender.scribe.layout.ConversionPattern=[fqdnFromPuppetOrChef] %d{ISO8601} %m
 
 	# optional properties
-	# canonical hostname will be looked up if not provided in localHostname
 	log4j.appender.scribe.category=application.appender.category
 	log4j.appender.scribe.remoteHost=127.0.0.1
 	log4j.appender.scribe.remotePort=1463
-	log4j.appender.scribe.localHostname=app01.host.com
 	log4j.appender.scribe.stackTraceDepth=1
