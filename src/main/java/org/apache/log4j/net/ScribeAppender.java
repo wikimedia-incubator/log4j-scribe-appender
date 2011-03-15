@@ -18,7 +18,6 @@
 package org.apache.log4j.net;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -68,8 +67,6 @@ public class ScribeAppender extends AppenderSkeleton {
 
     private String category = DEFAULT_CATEGORY;
 
-    private String localHostname;
-
     private int stackTraceDepth = DEFAULT_STACK_TRACE_DEPTH;
 
     private Client client;
@@ -93,8 +90,6 @@ public class ScribeAppender extends AppenderSkeleton {
             getErrorHandler().error("DROP - no connection: " + message);
             return;
         }
-
-        findAndSetLocalHostnameIfNeeded();
 
         try {
             // log it to the client
@@ -134,10 +129,6 @@ public class ScribeAppender extends AppenderSkeleton {
         return category;
     }
 
-    public String getLocalHostname() {
-        return localHostname;
-    }
-
     public String getRemoteHost() {
         return remoteHost;
     }
@@ -162,10 +153,6 @@ public class ScribeAppender extends AppenderSkeleton {
 
         Validate.notEmptyString(category, "Category must not be empty");
         this.category = category;
-    }
-
-    public void setLocalHostname(final String localHostname) {
-        this.localHostname = localHostname;
     }
 
     public void setRemoteHost(final String remoteHost) {
@@ -202,17 +189,12 @@ public class ScribeAppender extends AppenderSkeleton {
             stackTrace = sb.toString();
         }
 
-        // no null local hostnames, just leave empty if can't be found
-        if (localHostname == null) {
-            localHostname = "";
-        }
-
         // build log message to send with or without stack trace
         if (stackTrace == null) {
-            return String.format("[%s] %s", localHostname, layout.format(event), stackTrace);
+            return String.format("%s", layout.format(event), stackTrace);
         }
 
-        return String.format("[%s] %s {%s}", localHostname, layout.format(event), stackTrace);
+        return String.format("%s {%s}", layout.format(event), stackTrace);
     }
 
     /**
@@ -261,20 +243,6 @@ public class ScribeAppender extends AppenderSkeleton {
 
         TBinaryProtocol protocol = new TBinaryProtocol(transport, false, false);
         client = new Client(protocol, protocol);
-    }
-
-    /**
-     * If no {@link #localHostname} has been set, this will attempt to set it.
-     */
-    private void findAndSetLocalHostnameIfNeeded() {
-
-        if (localHostname == null) {
-            try {
-                localHostname = InetAddress.getLocalHost().getCanonicalHostName();
-            } catch (UnknownHostException e) {
-                // can't get hostname
-            }
-        }
     }
 
     private void handleError(final String failure, final Exception e) {

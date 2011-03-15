@@ -78,17 +78,16 @@ public class ScribeAppenderTest {
 
         // there should be nothing running on port 1 anyways
         appender.setRemotePort(1);
-        appender.setLocalHostname("localHostname");
 
         append("test message");
 
-        Mockito.verify(mockErrorHandler).error("DROP - no connection: [localHostname] INFO - test message");
+        Mockito.verify(mockErrorHandler).error("DROP - no connection: INFO - test message");
         Mockito.verify(mockErrorHandler).error(Matchers.contains("Connection refused"));
     }
 
     @Test
     public void testDefaultConfiguration() {
-        validateConfiguration("default", "127.0.0.1", 1463, null, 1);
+        validateConfiguration("default", "127.0.0.1", 1463, 1);
     }
 
     @Test
@@ -140,7 +139,7 @@ public class ScribeAppenderTest {
 
         stopService();
 
-        Mockito.verify(mockErrorHandler).error("DROP - TRY_LATER: [localHostname] INFO - test message");
+        Mockito.verify(mockErrorHandler).error("DROP - TRY_LATER: INFO - test message");
     }
 
     @Test
@@ -151,7 +150,7 @@ public class ScribeAppenderTest {
         setupScribeMock(
                 "default",
                 new StartsWith(
-                        "[localHostname] INFO - test message {java.lang.Exception: test exception message\tat org.apache.log4j.net.ScribeAppenderTest.testRemoteAppend_WithException"),
+                        "INFO - test message {java.lang.Exception: test exception message\tat org.apache.log4j.net.ScribeAppenderTest.testRemoteAppend_WithException"),
                 ResultCode.OK);
 
         append("test message", new Exception("test exception message"));
@@ -165,10 +164,9 @@ public class ScribeAppenderTest {
         appender.setCategory("category");
         appender.setRemoteHost("remoteHost");
         appender.setRemotePort(1);
-        appender.setLocalHostname("localHostname");
         appender.setStackTraceDepth(0);
 
-        validateConfiguration("category", "remoteHost", 1, "localHostname", 0);
+        validateConfiguration("category", "remoteHost", 1, 0);
     }
 
     private void append(final String message) {
@@ -189,14 +187,12 @@ public class ScribeAppenderTest {
     private void setupScribeMock(final String category, final Matcher<String> messageMatcher,
             final ResultCode resultCode) throws TException {
 
-        appender.setLocalHostname("localHostname");
-
         Mockito.when(mockScribeIface.Log(Matchers.argThat(new LogEntryMatcher(category, messageMatcher)))).thenReturn(
                 resultCode);
     }
 
     private void setupScribeMock(final String message, final ResultCode resultCode) throws TException {
-        setupScribeMock("default", new IsEqual<String>("[localHostname] INFO - " + message), resultCode);
+        setupScribeMock("default", new IsEqual<String>("INFO - " + message), resultCode);
     }
 
     private void startService() throws TTransportException, IOException {
@@ -238,12 +234,11 @@ public class ScribeAppenderTest {
     }
 
     private void validateConfiguration(final String category, final String remoteHost, final int remotePort,
-            final String localHostname, final int stackTraceDepth) {
+            final int stackTraceDepth) {
 
         Assert.assertEquals(category, appender.getCategory());
         Assert.assertEquals(remoteHost, appender.getRemoteHost());
         Assert.assertEquals(remotePort, appender.getRemotePort());
-        Assert.assertEquals(localHostname, appender.getLocalHostname());
         Assert.assertEquals(stackTraceDepth, appender.getStackTraceDepth());
     }
 
