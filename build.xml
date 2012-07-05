@@ -1,0 +1,56 @@
+<project name="scribe-log4j" default="dist" basedir=".">
+
+    <!-- project wide settings. All directories relative to basedir -->
+    <property name="src.dir" value="src/main/java/org/apache/log4j/net/"/>
+    <property name="jar.dir" value="/usr/share/java"/>
+
+
+    <!-- temp build directories -->
+    <property name="build.dir" value="build"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.lib.dir" value="${build.dir}/lib"/>
+
+    <!-- final distribution directories -->
+    <property name="dist.dir" value="/usr"/>
+    <property name="dist.lib.dir" value="${dist.dir}/share/java"/>
+
+    <!-- make temporary and distribution directories -->
+    <target name="prepare">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.lib.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${dist.lib.dir}"/>
+    </target>
+
+    <!-- compile the base and thrift generated code and jar them -->
+    <target name="dist" depends="prepare">
+        <echo>Building scribe-log4j.jar .... </echo>
+        <javac srcdir="${src.dir}" destdir="${build.classes.dir}" debug="on">
+            <classpath>
+                <pathelement location="${jar.dir}/log4j-1.2.jar"/>
+                <pathelement location="${jar.dir}/libthrift.jar"/>
+                <pathelement location="${jar.dir}/slf4j-api.jar"/>
+                <pathelement location="${jar.dir}/libfb303.jar"/>
+                <pathelement location="${jar.dir}/libscribe.jar"/>
+            </classpath>
+            <include name="*.java"/>
+        </javac>
+        <jar jarfile="${build.lib.dir}/scribe-log4j.jar" basedir="${build.classes.dir}">
+        </jar>
+    </target>
+
+    <!-- copy the build jar to the distribution library directory -->
+    <target name="install" depends="dist">
+        <copy todir="${dist.lib.dir}">
+            <fileset dir="${build.lib.dir}" includes="scribe-log4j.jar"/>
+        </copy>
+    </target>
+
+    <target name="clean">
+        <echo>Cleaning old stuff .... </echo>
+        <delete dir="${build.dir}/classes/com"/>
+        <delete dir="${build.dir}/lib"/>
+        <delete dir="${build.dir}"/>
+    </target>
+</project>
