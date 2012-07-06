@@ -6,6 +6,11 @@ JAVA_HOME := $(shell /usr/sbin/update-java-alternatives --list | cut -d ' ' -f 3
 VERSION=0.1
 
 binary: install
+	dh_installchangelogs
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
 
 clean:
 	dh_clean
@@ -15,13 +20,9 @@ build:
 	dh_testdir
 	dh_testroot
 	dh_prep
+
+	# build jar file
 	ant -Dversion=$(VERSION)
-	
-	dh_installchangelogs
-	dh_installdeb
-	dh_gencontrol
-	dh_md5sums
-	dh_builddeb
 
 install: build
 	dh_installdirs
