@@ -16,6 +16,12 @@ build:
 	dh_testroot
 	dh_prep
 	ant -Dversion=$(VERSION)
+	
+	dh_installchangelogs
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
 
 install: build
 	dh_installdirs
