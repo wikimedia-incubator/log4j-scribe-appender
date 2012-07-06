@@ -1,0 +1,15 @@
+Source: libscribe-log4j-java
+Priority: extra
+Maintainer: Andrew Otto <otto@wikimedia.org>
+Build-Depends: debhelper (>= 7.0.50~), javahelper (>=0.25), liblog4j1.2-java, libslf4j-java, libthrift-java, libfb303-java, libscribe-java
+Build-Depends-Indep: default-jdk | sun-java6-jdk, ant
+Standards-Version: 3.9.0
+Section: utils
+Homepage: https://github.com/wmf-analytics/log4j-scribe-appender/
+
+Package: libscribe-log4j-java
+Architecture: all
+Depends: ${java:Depends}, ${misc:Depends}, liblog4j1.2-java, libslf4j-java, libthrift-java, libfb303-java, libscribe-java
+Recommends: ${java:Recommends}
+Description: A Scribe appender for Log4j.
+  This allows log events to be sent to a local or remote Scribe instance from java programs.

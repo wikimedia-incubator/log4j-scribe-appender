@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+
+# Get the java home directory for the version of java we are using
+JAVA_HOME := $(shell /usr/sbin/update-java-alternatives --list | cut -d ' ' -f 3)
+
+VERSION=0.1
+
+binary: install
+
+clean:
+	dh_clean
+	ant clean
+
+build:
+	dh_testdir
+	dh_testroot
+	dh_prep
+	ant -Dversion=$(VERSION)
+
+install: build
+	dh_installdirs
+	# use ant to install the .jar file, and then symlink it without the version number.
+	ant -Dversion=$(VERSION) -Ddist.dir=$(CURDIR)/debian/libscribe-log4j-java/usr install && cd $(CURDIR)/debian/libscribe-log4j-java/usr/share/java && ln -s scribe-log4j-$(VERSION).jar scribe-log4j.jar

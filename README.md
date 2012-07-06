@@ -23,13 +23,18 @@ History
  * added better error reporting through log4j
  * added test cases
  * added Tomcat log4j access log valve
+ 
+[Andrew Otto](https://github.com/wmf-analytics/log4j-scribe-appender)
+
+ * Added build.xml and debian/ packaging.
+ * .debs are built and available at [scribe-debian](https://github.com/wmf-analytics/scribe-debian)
 
 Building
 ---
 
 You will need the following libraries installed in your Maven repository since they don't exist in the central repo:
 
- * [Thrift](http://thrift.apache.org) - 0.6.0
+ * [Thrift](http://thrift.apache.org) - 0.2.0 - 0.6.0
 
 Configuration
 ---
