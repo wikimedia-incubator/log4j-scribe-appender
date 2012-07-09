@@ -222,10 +222,10 @@ public class ScribeAppender extends AppenderSkeleton {
 
         // build log message to send with or without stack trace
         if (stackTrace == null) {
-            return String.format("[%s] %s", localHostname, layout.format(event), stackTrace);
+            return String.format("[%s]\t%s", localHostname, layout.format(event), stackTrace);
         }
 
-        return String.format("[%s] %s {%s}", localHostname, layout.format(event), stackTrace);
+        return String.format("[%s]\t%s\t{%s}", localHostname, layout.format(event), stackTrace);
     }
 
     /**
