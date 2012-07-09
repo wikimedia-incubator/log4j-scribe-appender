@@ -1,5 +1,6 @@
 libscribe-log4j-java (0.1) unstable; urgency=low
 
   * Added debian/ packaging
+  * Using tab as whitespace separator in prefixed strings in log message.
 
  -- Andrew Otto <otto@wikimedia.org>  Fri, 6 Jul 2012 10:45:00 -0500

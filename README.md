@@ -28,6 +28,7 @@ History
 
  * Added build.xml and debian/ packaging.
  * .debs are built and available at [scribe-debian](https://github.com/wmf-analytics/scribe-debian)
+ * Using tab as whitespace separate in manual inclusion of hostname in log string.
 
 Building
 ---
