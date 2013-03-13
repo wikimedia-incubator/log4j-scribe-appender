@@ -24,7 +24,7 @@ History
  * added test cases
  * added Tomcat log4j access log valve
  
-[Andrew Otto](https://github.com/wmf-analytics/log4j-scribe-appender)
+[Andrew Otto](https://github.com/wikimedia-incubator/log4j-scribe-appender)
 
  * Added build.xml and debian/ packaging.
  * .debs are built and available at [scribe-debian](https://github.com/wmf-analytics/scribe-debian)
